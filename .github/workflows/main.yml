@@ -1,0 +1,61 @@
+ame: Basic Workflow
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Dependencies
+        run: |
+          npm ci --prefer-offline --no-audit
+
+      - name: Run Linters
+        run: npm run lint
+
+      - name: Run Tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify 
+        run: 
+
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-artifacts
+          path: |
+            dist/
+            node_modules/  # You might want to remove this depending on your use case
+
+  deploy:
+    name: Deploy to Production
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'  # Only deploy on main branch push
+
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: build-artifacts
+          path: dist
+
+      - name: Deploy to Server
+        # Add your deployment script here, e.g., SSH or using another deployment tool
+        run: |
+          # Deployment script:
+           scp -r dist/* user@your-server:/path/to/deploy
+           echo ${{ secrets.API_SECRET }}
+           ssh user@your-server "cd /path/to/deploy && ./deploy.sh"
