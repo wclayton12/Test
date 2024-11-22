@@ -1,4 +1,4 @@
-Name: Basic Workflow
+name: Basic Workflow
 
 on: [push]
 
@@ -29,8 +29,7 @@ jobs:
         run: npm run build
 
       - name: Verify 
-        run: 
-
+        run:
       - name: Archive Artifacts
         uses: actions/upload-artifact@v2
         with:
