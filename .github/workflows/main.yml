@@ -29,7 +29,8 @@ jobs:
         run: npm run build
 
       - name: Verify 
-        run:
+        run: npm run verify
+        
       - name: Archive Artifacts
         uses: actions/upload-artifact@v2
         with:
