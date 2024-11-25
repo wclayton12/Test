@@ -52,7 +52,7 @@ jobs:
           name: build-artifacts
           path: dist
 
-      - name: Deploy to Server
+      - name: Deploy to Server ##test
         # Add your deployment script here, e.g., SSH or using another deployment tool
         run: |
           # Deployment script:
